@@ -1,1 +1,118 @@
 
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可拖动浮动按钮示例</title>
+    <link rel="stylesheet" href="styles.css">
+    <style type="text/css">
+        /* 固定浮动按钮样式 */
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background-color: #ff5722;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 60px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .floating-btn img {
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+        }
+
+        .floating-btn:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 其他内容 -->
+
+    <div class="floating-btn" id="floatingBtn">
+        <a href="index.html"><img src="your-icon.png" alt="Button Icon"></a>
+    </div>
+
+    <!-- 其他内容 -->
+
+    <script>
+        // 获取按钮元素
+        var floatingBtn = document.getElementById("floatingBtn");
+
+        // 初始化变量
+        var isDragging = false;
+        var isMoved = false; // 用于检测是否手动移动过
+        var offsetX, offsetY;
+        var directionX = 1; // X方向移动速度
+        var directionY = 1; // Y方向移动速度
+
+        // 设置按钮初始位置
+        var posX = window.innerWidth / 2 - floatingBtn.offsetWidth / 2;
+        var posY = window.innerHeight - floatingBtn.offsetHeight - 20;
+        floatingBtn.style.left = posX + "px";
+        floatingBtn.style.top = posY + "px";
+
+        // 鼠标按下事件
+        floatingBtn.addEventListener("mousedown", function (e) {
+            isDragging = true;
+            offsetX = e.clientX - floatingBtn.getBoundingClientRect().left;
+            offsetY = e.clientY - floatingBtn.getBoundingClientRect().top;
+        });
+
+        // 鼠标移动事件
+        document.addEventListener("mousemove", function (e) {
+            if (isDragging) {
+                var newX = e.clientX - offsetX;
+                var newY = e.clientY - offsetY;
+                floatingBtn.style.left = newX + "px";
+                floatingBtn.style.top = newY + "px";
+                floatingBtn.style.transform = "none"; // 取消水平居中
+                isMoved = true; // 标记为手动移动过
+            }
+        });
+
+        // 鼠标松开事件
+        document.addEventListener("mouseup", function () {
+            isDragging = false;
+        });
+
+        // 按钮缓缓移动函数
+        function moveButton() {
+            if (!isDragging && !isMoved) { // 如果没有手动移动过且未拖动时才自动移动
+                // 更新按钮位置
+                posX += directionX;
+                posY += directionY;
+
+                // 碰到边界时反弹
+                if (posX <= 0 || posX >= window.innerWidth - floatingBtn.offsetWidth) {
+                    directionX *= -1;
+                }
+                if (posY <= 0 || posY >= window.innerHeight - floatingBtn.offsetHeight) {
+                    directionY *= -1;
+                }
+
+                floatingBtn.style.left = posX + "px";
+                floatingBtn.style.top = posY + "px";
+            }
+
+            requestAnimationFrame(moveButton);
+        }
+
+        // 启动移动动画
+        moveButton();
+    </script>
+</body>
+
+</html>
