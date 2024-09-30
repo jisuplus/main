@@ -1,0 +1,13 @@
+{
+	"appid":"H5EEAC707",
+    "iOS":{
+    	"version":"1.0.0",
+    	"note":"iOS新版本",
+    	"url":""
+    },
+    "Android":{
+    	"version":"1.0.0",
+    	"note":"重大更新，请更新",
+    	"url":""
+    }
+}
